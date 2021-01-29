@@ -1,32 +1,85 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div class="container" style="padding: 35px 0">
+      <div class="row">
+        <div class="input-field col s12">
+          <input
+            v-on:keyup.enter="enter"
+            v-model="search"
+            placeholder="Введите имя персонажа"
+            type="text"
+            class="validate"
+          />
+          <label class="active" for="name">Персонажи</label>
+        </div>
+        <div class="col">
+          <router-link
+            to="/"
+            class="card"
+            v-for="character of getData"
+            :key="character.id"
+          >
+            <div class="card-image">
+              <img v-bind:src="character.image" />
+              <span class="card-title">{{ character.name }}</span>
+            </div>
+          </router-link>
+        </div>
+      </div>
+      <div class="row" style="display: flex; justify-content: center;">
+        <button v-on:click="next" class="btn" type="button">
+          Следующая страница
+        </button>
+      </div>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+@import "~materialize-css/dist/css/materialize.min.css";
+
+.col {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+}
+.card {
+  width: calc(33.33333% - 15px);
+  margin-right: 15px;
+}
+.card-title {
+  color: darkred !important;
+  font-weight: 700 !important;
 }
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.card-content p {
+  color: black !important;
 }
 </style>
+
+<script>
+export default {
+  data() {
+    return {
+      search: "",
+    };
+  },
+  computed: {
+    getData() {
+      return this.$store.state.character;
+    },
+  },
+  async mounted() {
+    await this.$store.dispatch("fetchFilteredCharacters");
+  },
+  methods: {
+    enter() {
+      this.$store.dispatch("fetchFilteredCharacters", `?name=${this.search}`);
+    },
+    async next() {
+      this.$store.dispatch("nextCharacters", this.$store.state.info.next);
+    },
+  },
+};
+</script>
