@@ -1,5 +1,4 @@
-# post-list-app-vue2
-
+# Rick and Morty date character base
 ## Project setup
 ```
 npm install

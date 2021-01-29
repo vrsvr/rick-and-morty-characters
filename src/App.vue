@@ -26,10 +26,11 @@
           </router-link>
         </div>
       </div>
+      <div v-if="this.$store.state.info.next === null" class="row" style="display: flex; justify-content: center;">
+        <h2>Персонажи закончились</h2>
+      </div>
       <div class="row" style="display: flex; justify-content: center;">
-        <button v-on:click="next" class="btn" type="button">
-          Следующая страница
-        </button>
+        <h2>Персонажи с таким именем не найден</h2>
       </div>
     </div>
     <router-view />
@@ -62,7 +63,7 @@
 export default {
   data() {
     return {
-      search: "",
+      search: ""
     };
   },
   computed: {
@@ -76,10 +77,24 @@ export default {
   methods: {
     enter() {
       this.$store.dispatch("fetchFilteredCharacters", `?name=${this.search}`);
+      console.log(this.search);
     },
     async next() {
       this.$store.dispatch("nextCharacters", this.$store.state.info.next);
     },
+    async scrollPage() {
+       if(window.scrollY+1 >= document.documentElement.scrollHeight-document.documentElement.clientHeight) {
+        if (this.$store.state.info.next) {
+          await this.$store.dispatch("nextCharacters", this.$store.state.info.next);
+        }
+      }
+    },
   },
+  created() {
+    window.addEventListener('scroll', this.scrollPage)
+  },
+  destroy() {
+    window.removeEventListener('scroll', this.scrollPage)
+  }
 };
 </script>
