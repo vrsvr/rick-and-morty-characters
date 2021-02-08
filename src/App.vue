@@ -29,9 +29,6 @@
       <div v-if="this.$store.state.info.next === null" class="row" style="display: flex; justify-content: center;">
         <h2>Персонажи закончились</h2>
       </div>
-      <div class="row" style="display: flex; justify-content: center;">
-        <h2>Персонажи с таким именем не найден</h2>
-      </div>
     </div>
     <router-view />
   </div>

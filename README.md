@@ -1,4 +1,4 @@
-# Rick and Morty date character base
+# Rick and Morty characters
 ## Project setup
 ```
 npm install
